@@ -15,6 +15,7 @@
     </head>
 
     <body>
+        <!--Error page setting does not work, I think it is the same issue as the other page load errors-->
         <%@page contentType="text/html" pageEncoding="UTF-8" import="javax.servlet.*" errorPage="errorPage.jsp"%>
         
         <header>

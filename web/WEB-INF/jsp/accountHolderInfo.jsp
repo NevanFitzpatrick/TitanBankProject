@@ -33,7 +33,7 @@
                 //foreach(BankAccount a in accountList)
                 //{
             %>
-                <!--jsp:include page="accountInfo.jsp"/>-->
+                <jsp:include page="accountInfo.jsp"/>>
             <%
                 //}
             %>
