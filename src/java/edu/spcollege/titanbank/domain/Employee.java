@@ -8,20 +8,20 @@ package edu.spcollege.titanbank.domain;
 public class Employee
 {   
     // Field
-    private String employeeID;
+    private int employeeID;
     private String employeeTitle;
     
     private boolean onTheClock = false;
 
     // Constructor
-    public Employee(String id, String title, String firstName, String lastName) 
+    public Employee(int id, String title, String firstName, String lastName) 
     {
         this.employeeID = id;
         this.employeeTitle = title;
     }
     
     // Getters
-    public String getEmployeeID() 
+    public int getEmployeeID() 
     {
         return employeeID;
     }

@@ -8,14 +8,16 @@ import java.util.Date;
  */
 public class Transfer 
 {
+    private int transferNumber;
     private BankAccount destinationAccount;
     private BankAccount sourceAccount;
     private double amount;
     private Date date;
     private TransactionStatus status;
 
-    public Transfer(BankAccount to, BankAccount from, double amount, TransactionStatus status) 
+    public Transfer(int transferNumber, BankAccount to, BankAccount from, double amount, TransactionStatus status) 
     {
+        this.transferNumber = transferNumber;
         this.destinationAccount = to;
         this.sourceAccount = from;
         this.amount = amount;
@@ -33,6 +35,12 @@ public class Transfer
     }
 
     // Getters
+    public int getTransferNumber() 
+    {
+        return transferNumber;
+    }
+    
+    
     public BankAccount getDestinationAccount() 
     {
         return destinationAccount;

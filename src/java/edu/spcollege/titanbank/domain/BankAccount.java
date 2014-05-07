@@ -9,15 +9,15 @@ public class BankAccount
 {    
     // Fields
     private int accountNumber;
-    private Customer customer;
+    private int customerID;
     private double balance;
     private AccountType accountType;
 
     // Constructor
-    public BankAccount(int accountNumber, Customer customer, double intialFunds, AccountType accountType) 
+    public BankAccount(int accountNumber, int customerID, double intialFunds, AccountType accountType) 
     {
         this.accountNumber = accountNumber;
-        this.customer = customer;
+        this.customerID = customerID;
         this.balance = intialFunds;
         this.accountType = accountType;
     }
@@ -33,9 +33,9 @@ public class BankAccount
         return accountType;
     }
 
-    public Customer getCustomer() 
+    public int getCustomerID() 
     {
-        return customer;
+        return customerID;
     }
 
     public double getBalance() 

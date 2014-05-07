@@ -3,14 +3,15 @@ package edu.spcollege.titanbank.controllers;
 import edu.spcollege.titanbank.domain.*;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
 
-public class LoginServlet extends HttpServlet 
+public class ViewChecksServlet extends HttpServlet 
 {
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -24,37 +25,37 @@ public class LoginServlet extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException 
     {
-        AuthenticationService service;
-        String userName;
-        String password;
-        Customer customer;
+        CheckManagementService service;
+        HttpSession session = request.getSession(false);
         PrintWriter out = response.getWriter();
-        HttpSession session = request.getSession(true);
         
+        // Check for and display each check associated with this account.
         response.setContentType("text/html;charset=UTF-8");
-        try 
+        
+        int accountNumber = 0;
+        String buttonName = null;
+        
+        try
         {
-            service = new AuthenticationService(new UserSystem());
-            userName = (String)request.getParameter("username");
-            password = (String)request.getParameter("password");
-            customer = service.logIn(userName, password);
+            service = new CheckManagementService(new CheckSystem());
             
-            if(customer != null)
+            // Setup and run a search for which button sent the request.
+            boolean foundButton = false;
+            
+            for(int i = 1; i < 10 && foundButton == false; i++)
             {
-                session.setAttribute("loggedIn", new Boolean(true));
-                session.setAttribute("userName", userName);
-                session.setAttribute("password", password);
-                session.setAttribute("customerID", customer.getCustomerID());
-                session.setAttribute("firstName", customer.getFirstName());
-                session.setAttribute("lastName", customer.getLastName());
-                
-                request.getRequestDispatcher("DisplayUserPageServlet").forward(request, response);
+                buttonName = "button" + String.valueOf(i);
+
+                if((String)request.getAttribute(buttonName) == buttonName)
+                {
+                    accountNumber = (int)session.getAttribute(buttonName);
+                    foundButton = true;
+                }
             }
-            else
+            
+            if (foundButton == true)
             {
-                // This code should never run, but just in case.....
-                session.setAttribute("loggedIn", new Boolean(false));
-                
+                //ArrayList<Check> checks = new ArrayList<>(service.getChecksByAccountNumber(accountNumber));
                 out.println("<!DOCTYPE html>");
                 out.println("<html lang=\"en\">");
                 out.println("<head>");
@@ -63,44 +64,31 @@ public class LoginServlet extends HttpServlet
                 out.println("</head>");
                 out.println("<body>");
                 out.println("<h1>Titan Bank</h1>");
-                out.println("Sorry, Incorrect Login, Try Again");
+                out.println("<p>Check Log</p>");
+                out.println("<p>Account Number: " + accountNumber + "</p>");
+                out.println("<p>" + buttonName + "</p>");
+                out.println("</body>");
+                out.println("</html>");
+            }
+            else
+            {
+                out.println("<!DOCTYPE html>");
+                out.println("<html lang=\"en\">");
+                out.println("<head>");
+                out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
+                out.println("<title>Titan Bank LoginServlet</title>");
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>Titan Bank</h1>");
+                out.println("<p>Check Log</p>");
+                out.println("<p>Did not find button</p>");
                 out.println("</body>");
                 out.println("</html>");
             }
         }
-        catch(UserNotFoundException ex)
+        catch(Exception ex)
         {
-            session.setAttribute("loggedIn", new Boolean(false));
-            
-            out.println("<!DOCTYPE html>");
-            out.println("<html lang=\"en\">");
-            out.println("<head>");
-            out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
-            out.println("<title>Titan Bank LoginServlet</title>");
-            out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"styles.css\" />");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Titan Bank</h1>");
-            out.println("Sorry, Incorrect User Name, Try Again");
-            out.println("</body>");
-            out.println("</html>");
-        }
-        catch(InvalidPasswordException ex)
-        {
-            session.setAttribute("loggedIn", new Boolean(false));
-            
-            out.println("<!DOCTYPE html>");
-            out.println("<html lang=\"en\">");
-            out.println("<head>");
-            out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
-            out.println("<title>Titan Bank LoginServlet</title>");
-            out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"styles.css\" />");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Titan Bank</h1>");
-            out.println("Sorry, Incorrect Password, Try Again");
-            out.println("</body>");
-            out.println("</html>");
+            JOptionPane.showMessageDialog(null,(String)ex.getMessage());
         }
     }
 

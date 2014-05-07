@@ -7,6 +7,7 @@ public class Check
     // Fields
     private int accountNum;
     private int checkNum;
+    private String checkID;
     private double checkAmount;
     private String to;
     private Date date;
@@ -15,8 +16,13 @@ public class Check
     // Constructor
     public Check(int accountNum, int checkNum, double checkAmount, String to, Date date) 
     {
+        String account = String.valueOf(accountNum);
+        String check = String.valueOf(checkNum);
+        String checkID = account + check;
+
         this.accountNum = accountNum;
         this.checkNum = checkNum;
+        this.checkID = checkID;
         this.checkAmount = checkAmount;
         this.to = to;
         this.date = date;
@@ -32,6 +38,11 @@ public class Check
     public int getCheckNum() 
     {
         return checkNum;
+    }
+    
+    public String getCheckID()
+    {
+        return checkID;
     }
 
     public double getCheckAmount() 

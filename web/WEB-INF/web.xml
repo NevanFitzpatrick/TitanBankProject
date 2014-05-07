@@ -24,6 +24,14 @@
         <servlet-name>TransferFundsServlet</servlet-name>
         <servlet-class>edu.spcollege.titanbank.controllers.TransferFundsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DisplayUserPageServlet</servlet-name>
+        <servlet-class>edu.spcollege.titanbank.controllers.DisplayUserPageServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewChecksServlet</servlet-name>
+        <servlet-class>edu.spcollege.titanbank.controllers.ViewChecksServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>*.htm</url-pattern>
@@ -39,6 +47,14 @@
     <servlet-mapping>
         <servlet-name>TransferFundsServlet</servlet-name>
         <url-pattern>/TransferFundsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DisplayUserPageServlet</servlet-name>
+        <url-pattern>/DisplayUserPageServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewChecksServlet</servlet-name>
+        <url-pattern>/ViewChecksServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

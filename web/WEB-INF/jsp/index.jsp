@@ -2,20 +2,13 @@
    "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
-    <%
-        ServletContext sc = this.getServletContext();
-        String stylePath = sc.getRealPath("/WEB-INF/jsp/styles.css");
-        String accountPath = sc.getRealPath("/WEB-INF/jsp/accountHolderInfo.jsp");
-    %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Welcome to Titan Bank</title>
-        <!--Style sheet does not work, Chrome says "Can not load local resource"-->
-        <link rel="stylesheet" type="text/css" href="<%=accountPath%>styles.css" />
+        
     </head>
 
     <body>
-        <!--Error page setting does not work, I think it is the same issue as the other page load errors-->
         <%@page contentType="text/html" pageEncoding="UTF-8" import="javax.servlet.*" errorPage="errorPage.jsp"%>
         
         <header>
@@ -23,12 +16,11 @@
         </header>
 
         <section>
-            <!--This form action does not work, Chrome says "Can not load local resource"-->
-            <form action="<%=accountPath%>" method="post">
+            <form action="LoginServlet" method="post">
                 <p>Login</p>
                 <p><label>User Name: <input type="text" name="username" size="50" /></label></p>
                 <p><label>Password: <input type="text" name="password" size="50" /></label></p>
-                <p><input type="submit" value="Enter"</p>
+                <p><input type="submit" value="Enter"/></p>
             </form>
         </section>
 

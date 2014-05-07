@@ -1,25 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package edu.spcollege.titanbank.controllers;
 
+import edu.spcollege.titanbank.domain.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import edu.spcollege.titanbank.domain.*;
+import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author Nevan
- */
-public class ViewAccountServlet extends HttpServlet {
 
+public class ViewAccountServlet extends HttpServlet 
+{
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,25 +26,65 @@ public class ViewAccountServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException 
     {
-        // Add Fields for retrieving customer data.
+        AccountManagementService service;
+        HttpSession session = request.getSession(false);
+        PrintWriter out = response.getWriter();
         
         // Check for and display each account held by the customer.
-        
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) 
+        out.println("<p>View Account Servlet</p>");
+        
+        try 
         {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ViewAccountServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ViewAccountServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            service = new AccountManagementService(new AccountSystem());
+            int customerID = (int)session.getAttribute("customerID");
+            int buttonCount = 0;
+            ArrayList<BankAccount> customerAccounts = new ArrayList<>(service.getAccountsByCustomerID(customerID));
+            
+            if(customerAccounts.size() > 0)
+            {
+                for(BankAccount a : customerAccounts)
+                {
+                    out.println("<p>Account Number: " + String.valueOf(a.getAccountNumber() + "</p>"));
+                    out.println("<p>Account Type: " + String.valueOf(a.getAccountType()) + "</p>");
+                    out.println("<p>Account Balance: " + String.valueOf(a.getBalance()) + "</p>");
+                    
+                    if(a.getAccountType() == AccountType.Checkings)
+                    {
+                        buttonCount++;
+                        String buttonName = "button" + String.valueOf(buttonCount);
+                        
+                        int accountNumber = a.getAccountNumber();
+                        session.setAttribute(buttonName, accountNumber);
+                        
+                        // Button, if clicked takes user to the checking info page with with this account info.
+                        out.println("<p>");
+                        out.println("<form action=\"ViewChecksServlet\" name=\"" + buttonName + "\" method=\"post\">");
+                        out.println("<input type=\"submit\" value=\"" + buttonName + "\" />");
+                        out.println("</form>");
+                        out.println("</p>");
+                    }
+                }
+            }
+            else
+            {
+                out.println("<!DOCTYPE html>");
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>Servlet ViewAccountServlet</title>");            
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<p>No bank accounts associated with this customer.</p>");
+                out.println("</body>");
+                out.println("</html>");
+            }
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null,(String)ex.getMessage());
         }
     }
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -63,7 +97,8 @@ public class ViewAccountServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException 
+    {
         processRequest(request, response);
     }
 
@@ -77,7 +112,8 @@ public class ViewAccountServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException 
+    {
         processRequest(request, response);
     }
 
@@ -87,7 +123,8 @@ public class ViewAccountServlet extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+    public String getServletInfo() 
+    {
         return "Short description";
     }// </editor-fold>
 

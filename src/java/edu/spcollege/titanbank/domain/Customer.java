@@ -16,9 +16,9 @@ public class Customer
     private String lastName;
     
     // Constructor
-    public Customer(int customerNumber, String firstName, String lastName) 
+    public Customer(int customerID, String firstName, String lastName) 
     {
-        this.customerID = customerNumber;
+        this.customerID = customerID;
         this.firstName = firstName;
         this.lastName = lastName;
     }
